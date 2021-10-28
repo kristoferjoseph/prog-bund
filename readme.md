@@ -2,7 +2,7 @@
 
 Automatically bundle esmodules in `/public`. This is for bundling frontend assets.
 
-## Usage proposal    
+## Usage proposal
 
 Example `app.arc`; enable bundling by declaring the `bundle` folder for build output:
 
@@ -19,7 +19,7 @@ entry index.js # pre bundle file(s) at deploy time for max speeds
 
 - [ ] add `src/http/get-index/get-bundle` to `@architect/functions`
 - [ ] speed up sync
-- [ ] auto ignore bundle folder in deploy 
+- [ ] auto ignore bundle folder in deploy
 
 # future
 - [ ] merge capability maybe instead
