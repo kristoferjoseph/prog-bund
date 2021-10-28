@@ -10,7 +10,7 @@ exports.handler = async function http (req) {
 
   // catch a reference to our requested file
   // its worth noting we KNOW this variable exists because of IaC
-  let requestedFile = req.requestContext.http.path.replace('/_bundle', '')
+  let requestedFile = req.requestContext.http.path.replace('/bundle', '')
 
   // allow query param debug
   let debugging = !!(req.queryStringParameters && req.queryStringParameters.arc_waterfall)

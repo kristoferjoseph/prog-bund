@@ -34,7 +34,7 @@ module.exports = async function bundled (value) {
     console.error(e)
   }
 
-  return `/_bundle${value}`
+  return `/bundle${value}`
 }
 
 /** get absolute path to static folder */
