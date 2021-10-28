@@ -1,0 +1,37 @@
+{
+  "arc": {
+    "app": "prog-bundle",
+    "static": {
+      "ignore": ["public/dist"]
+    },
+    "http": [
+      [
+        "get",
+        "/"
+      ],
+      [
+        "get",
+        "/_bundle/*"
+      ]
+    ]
+  },
+  "scripts": {
+    "start": "rm -rf public/dist && sandbox",
+    "start:debug": "rm -rf public/dist && ARC_BUNDLE=waterfall sandbox",
+    "lint": "eslint --fix src",
+    "test": "npm run lint && tape test/*-test.js | tap-spec"
+  },
+  "eslintConfig": {
+    "extends": "@architect/eslint-config",
+    "rules": {
+      "require-await": "off"
+    }
+  },
+  "dependencies": {
+    "@architect/eslint-config": "^1.0.0",
+    "@architect/sandbox": "^3.3.7",
+    "eslint": "^7.21.0",
+    "tap-spec": "^5.0.0",
+    "tape": "^4.13.2"
+  }
+}
