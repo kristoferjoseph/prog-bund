@@ -8,5 +8,8 @@
     "@architect/sandbox": "^3.7.4",
     "tap-min": "^2.0.0",
     "tape": "^4.13.2"
+  },
+  "devDependencies": {
+    "@architect/architect": "^10.0.5"
   }
 }
