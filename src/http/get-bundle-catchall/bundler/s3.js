@@ -1,9 +1,9 @@
-let rollup = require('rollup')
-let aws = require('aws-sdk')
-let path = require('path')
-let crypto = require('crypto')
-let sync = require('./sync')
-let getDist = require('../get-static-bundle')
+const esbuild = require('esbuild')
+const aws = require('aws-sdk')
+const path = require('path')
+const crypto = require('crypto')
+const sync = require('./sync')
+const getDist = require('../get-static-bundle')
 
 /** implement progressive bundle with s3 */
 module.exports = async function _s3 ({ file, _bundle }) {
@@ -25,9 +25,8 @@ module.exports = async function _s3 ({ file, _bundle }) {
   // bundle
   console.time('bundle')
   let input = path.join('/tmp', file)
-  let bundle = await rollup.rollup({ input })
-  let bundled = await bundle.generate({ format: 'esm' })
-  let source = bundled.output[0].code
+  let bundle = esbuild.transformSync(input, { format: 'esm' })
+  let source = bundle.code
   console.timeEnd('bundle')
 
   // fingerprint

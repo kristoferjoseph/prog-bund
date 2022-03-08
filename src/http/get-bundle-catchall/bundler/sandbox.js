@@ -1,10 +1,15 @@
-let rollup = require('rollup')
-let crypto = require('crypto')
-let path = require('path')
-let fs = require('fs')
+const esbuild = require('esbuild')
+const crypto = require('crypto')
+const path = require('path')
+const {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync
+} = require('fs')
 
-let getFolder = require('../get-static-folder')
-let getDist = require('../get-static-bundle')
+const getFolder = require('../get-static-folder')
+const getDist = require('../get-static-bundle')
 
 /** implements progressive bundle locally */
 module.exports = async function sandbox ({ file }) {
@@ -14,22 +19,22 @@ module.exports = async function sandbox ({ file }) {
   let folder = await getFolder()
   let manifestBase = dist.path
   let manifestPath = path.join(manifestBase, 'manifest.json')
-  let exists = fs.existsSync(manifestPath)
+  let exists = existsSync(manifestPath)
   if (exists === false) {
-    fs.mkdirSync(manifestBase)
-    fs.writeFileSync(manifestPath, JSON.stringify({}))
+    mkdirSync(manifestBase)
+    writeFileSync(manifestPath, JSON.stringify({}))
   }
 
   // check for cached value
-  let manifest = JSON.parse(fs.readFileSync(manifestPath).toString())
+  let manifest = JSON.parse(readFileSync(manifestPath).toString())
   if (!!manifest[file] === false) {
 
     // bundle
     console.time('bundle')
-    let input = path.join(folder, file)
-    let bundle = await rollup.rollup({ input })
-    let bundled = await bundle.generate({ format: 'esm' })
-    let source = bundled.output[0].code
+    const input = readFileSync(path.join(folder, file), 'utf8')
+    console.log('INPUT', input)
+    let bundle = esbuild.transformSync(input, { format: 'esm' })
+    let source = bundle.code
     console.timeEnd('bundle')
 
     // fingerprint
@@ -46,8 +51,8 @@ module.exports = async function sandbox ({ file }) {
     // write file and update manifest.json
     console.time('write')
     manifest[file] = `/_static/${dist.value}${fingerprint}`
-    fs.writeFileSync(manifestPath, JSON.stringify(manifest))
-    fs.writeFileSync(path.join(dist.path, fingerprint), source)
+    writeFileSync(manifestPath, JSON.stringify(manifest))
+    writeFileSync(path.join(dist.path, fingerprint), source)
     console.timeEnd('write')
   }
 
